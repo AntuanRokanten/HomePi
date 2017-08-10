@@ -4,13 +4,8 @@ import com.pi4j.io.gpio.GpioFactory
 import com.pi4j.io.gpio.PinState
 import com.pi4j.io.gpio.RaspiPin
 import com.pi4j.io.gpio.trigger.GpioCallbackTrigger
-import org.springframework.boot.SpringApplication
 import java.io.BufferedReader
 import java.io.InputStreamReader
-
-fun main(args: Array<String>) {
-    SpringApplication.run(App::class.java, *args)
-}
 
 /**
  * @author ant
