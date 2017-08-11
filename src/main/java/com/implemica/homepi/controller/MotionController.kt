@@ -25,11 +25,20 @@ class MotionController {
         sensor.subscribeToMotionDetection(MotionListener())
     }
 
+    @MessageMapping("/motion-unsubscribe")
+    fun unsubscribe() {
+        val callback = {
+            println(" --> GPIO TRIGGER CALLBACK RECEIVED ")
+            null
+        }
+        sensor.unsubscribeFromMotionDetection()
+    }
+
     private class MotionListener : Callable<Void> {
 
-        @SendTo("/topic/temp-and-hum")
+        @SendTo("/topic/motion")
         override fun call(): Void {
-            return null!! // returning smthing to the topic
+            return null!! // returning something to the topic
         }
     }
 

@@ -11,7 +11,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
 import java.nio.file.Paths
 
-
 /**
  * @author ant
  */
@@ -19,13 +18,13 @@ import java.nio.file.Paths
 open class App {
 
     @Bean
-    fun temperatureAndHumiditySensor(): TemperatureAndHumiditySensor {
-        return Dht11Sensor(GPIO_17, Paths.get(this.javaClass.getResource("/python/AdfruitDHT.py").toURI()))
+    open fun motionSensor(): MotionSensor {
+        return Sr501Sensor(GPIO_29)
     }
 
     @Bean
-    fun motionSensor(): MotionSensor {
-        return Sr501Sensor(GPIO_29)
+    open fun temperatureAndHumiditySensor(): TemperatureAndHumiditySensor {
+        return Dht11Sensor(GPIO_17, Paths.get(this.javaClass.getResource("/python/AdfruitDHT.py").toURI()))
     }
 
 }

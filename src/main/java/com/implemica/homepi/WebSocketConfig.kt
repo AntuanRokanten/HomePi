@@ -18,7 +18,7 @@ open class WebSocketConfig : AbstractWebSocketMessageBrokerConfigurer() {
         config.setApplicationDestinationPrefixes("/app")
     }
 
-    override fun registerStompEndpoints(registry: StompEndpointRegistry?) {
-        registry?.addEndpoint("/gs-guide-websocket")?.withSockJS()
+    override fun registerStompEndpoints(registry: StompEndpointRegistry) {
+        registry.addEndpoint("/pi-websocket").withSockJS()
     }
 }

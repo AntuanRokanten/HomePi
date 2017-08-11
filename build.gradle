@@ -25,13 +25,13 @@ apply plugin: 'application'
 apply plugin: 'org.springframework.boot'
 
 //sourceCompatibility = 1.8
-mainClassName = 'com.implemica.homepi.FirstKt'
+mainClassName = 'com.implemica.homepi.AppKt'
 
 jar {
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 
     manifest {
-        attributes 'Main-Class': 'com.implemica.homepi.FirstKt'
+//        attributes 'Main-Class': 'com.implemica.homepi.AppKt'
     }
 }
 
