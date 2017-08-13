@@ -12,9 +12,9 @@ class GreetingController {
 
     @MessageMapping("/hello")
     @SendTo("/topic/greetings")
-    fun greeting(message: HelloMessage): Greeting {
+    fun greeting(): Greeting {
         Thread.sleep(3000) // simulated delay
-        return Greeting("Hello, " + message.name + "!")
+        return Greeting("Hello, Antosha!")
     }
 
 }

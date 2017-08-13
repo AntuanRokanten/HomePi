@@ -7,6 +7,8 @@ import org.springframework.messaging.handler.annotation.SendTo
 import org.springframework.stereotype.Controller
 import java.util.concurrent.Callable
 
+
+
 /**
  * @author ant
  */
@@ -18,10 +20,6 @@ class MotionController {
 
     @MessageMapping("/motion-subscribe")
     fun subscribe() {
-        val callback = {
-            println(" --> GPIO TRIGGER CALLBACK RECEIVED ")
-            null
-        }
         sensor.subscribeToMotionDetection(MotionListener())
     }
 
@@ -37,8 +35,8 @@ class MotionController {
     private class MotionListener : Callable<Void> {
 
         @SendTo("/topic/motion")
-        override fun call(): Void {
-            return null!! // returning something to the topic
+        override fun call(): Void? {
+            return null  // returning something to the topic
         }
     }
 
