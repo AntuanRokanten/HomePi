@@ -2,6 +2,8 @@ package com.implemica.homepi.controller
 
 import com.implemica.homepi.sensor.TemperatureAndHumiditySensor
 import com.implemica.homepi.sensor.data.TemperatureAndHumidity
+import groovy.util.logging.Log4j2
+import org.slf4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
@@ -18,8 +20,13 @@ import java.util.concurrent.TimeUnit
  *
  * @author ant
  */
+@Log4j2
 @Controller
 class TemperatureAndHumidityController {
+
+    //    private val logger = LoggerFactory.getLogger(javaClass)
+    @Autowired
+    lateinit var logger: Logger
 
     /**
      * Injectable temperature and humidity update rate in minutes with default value
@@ -49,11 +56,8 @@ class TemperatureAndHumidityController {
 
     @MessageMapping("/temp-and-hum-subscribe")
     fun subscribe() {
-        future = scheduler.scheduleAtFixedRate({ tempAndHum() }, TimeUnit.SECONDS.toMillis(rate))
-//        future.cancel()
-
-//        val scheduler = Executors.newSingleThreadScheduledExecutor() // todo maybe do it with services
-//        scheduler.scheduleAtFixedRate({ tempAndHum() }, 0, 1, TimeUnit.MINUTES)
+        logger.info("Subscribing to temperature and humidity update. Update rate is $rate minute(s)")
+        future = scheduler.scheduleAtFixedRate({ tempAndHum() }, TimeUnit.MINUTES.toMillis(rate))
     }
 
     @MessageMapping("/temp-and-hum-unsubscribe")

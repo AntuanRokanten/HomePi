@@ -27,7 +27,7 @@ function connect() {
 //            console.log("Wow! : "+ greeting)
 //        });
 
-        stompClient.send("/app/temp-and-hum");
+        // stompClient.send("/app/temp-and-hum");
         stompClient.send("/app/temp-and-hum-subscribe");
         stompClient.subscribe('/topic/temp-and-hum', function (greeting) {
             console.log("Wow! : "+ greeting)

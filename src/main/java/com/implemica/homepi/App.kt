@@ -6,9 +6,13 @@ import com.implemica.homepi.sensor.impl.MockMotionSensor
 import com.implemica.homepi.sensor.impl.MockTempAndHumSensor
 import com.pi4j.io.gpio.RaspiPin.GPIO_17
 import com.pi4j.io.gpio.RaspiPin.GPIO_29
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.InjectionPoint
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Scope
 import org.springframework.scheduling.TaskScheduler
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 
@@ -35,6 +39,12 @@ open class App {
     @Bean("tempAndHumScheduler")
     open fun temperatureTaskScheduler(): TaskScheduler {
         return ThreadPoolTaskScheduler()
+    }
+
+    @Bean
+    @Scope("prototype")
+    open fun logger(ip: InjectionPoint): Logger {
+        return LoggerFactory.getLogger(ip.methodParameter.containingClass)
     }
 
 }

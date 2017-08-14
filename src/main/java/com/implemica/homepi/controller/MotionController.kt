@@ -25,10 +25,6 @@ class MotionController {
 
     @MessageMapping("/motion-unsubscribe")
     fun unsubscribe() {
-        val callback = {
-            println(" --> GPIO TRIGGER CALLBACK RECEIVED ")
-            null
-        }
         sensor.unsubscribeFromMotionDetection()
     }
 
