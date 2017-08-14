@@ -22,29 +22,18 @@ import java.util.concurrent.TimeUnit
  */
 @Log4j2
 @Controller
-class TemperatureAndHumidityController {
+class TemperatureAndHumidityController @Autowired constructor(val sensor: TemperatureAndHumiditySensor,
+                                                              val template: SimpMessagingTemplate,
+                                                              val logger: Logger,
 
-    //    private val logger = LoggerFactory.getLogger(javaClass)
-    @Autowired
-    lateinit var logger: Logger
+                                                              @Qualifier("tempAndHumScheduler")
+                                                              val scheduler: TaskScheduler,
 
-    /**
-     * Injectable temperature and humidity update rate in minutes with default value
-     */
-    @Value("\${temp.update.rate}")
-    private val rate: Long = 1
+                                                              @Value("\${temp.update.rate:1}")
+                                                              val rate: Long) {
 
-    @Autowired
-    private lateinit var sensor: TemperatureAndHumiditySensor
-
-    @Autowired
-    private lateinit var template: SimpMessagingTemplate
-
-    @Autowired
-    @Qualifier("tempAndHumScheduler")
-    private lateinit var scheduler: TaskScheduler
-
-    private lateinit var future: ScheduledFuture<*> // todo shouldn't it be volatile?
+    @Volatile
+    private lateinit var future: ScheduledFuture<*>
 
     @MessageMapping("/temp-and-hum")
     @SendTo("/topic/temp-and-hum")

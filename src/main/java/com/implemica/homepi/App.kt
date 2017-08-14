@@ -44,7 +44,7 @@ open class App {
     @Bean
     @Scope("prototype")
     open fun logger(ip: InjectionPoint): Logger {
-        return LoggerFactory.getLogger(ip.methodParameter.containingClass)
+        return LoggerFactory.getLogger(ip.member.name) // warning: will not work with field injection
     }
 
 }
