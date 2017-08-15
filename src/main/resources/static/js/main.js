@@ -6,39 +6,17 @@ function connect() {
 
     var socket = new SockJS('/pi-websocket');
     stompClient = Stomp.over(socket);
-    stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
 
-//        stompClient.send("/app/temp-and-hum-subscribe");
-//
-//        stompClient.subscribe('/topic/temp-and-hum', function (data) {
-//            console.log("Temp: " + data)
-//        });
-//
-//        stompClient.send("/app/motion-subscribe");
-//
-//        stompClient.subscribe('/topic/motion', function (data) {
-//            console.log("Motion! " + data)
-//        });
-
-
-//        stompClient.send("/app/hello");
-//        stompClient.subscribe('/topic/greetings', function (greeting) {
-//            console.log("Wow! : "+ greeting)
-//        });
-
-        // stompClient.send("/app/temp-and-hum");
-        stompClient.send("/app/temp-and-hum-subscribe");
-        stompClient.subscribe('/topic/temp-and-hum', function (greeting) {
-            console.log("Wow! : "+ greeting)
+    return new Promise(function(resolve, reject) {
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+            resolve();
         });
-
-
-    });
+    })
 }
 
 function subscribeToMotionDetection() {
-    stompClient.send("/motion-subscribe");
+    stompClient.send("/app/motion-subscribe");
 
     stompClient.subscribe('/topic/motion', function (data) {
         console.log("Motion! " + data)
@@ -46,7 +24,7 @@ function subscribeToMotionDetection() {
 }
 
 function subscribeToTempAndHumUpdates() {
-    stompClient.send("/temp-and-hum-subscribe");
+    stompClient.send("/app/temp-and-hum-subscribe");
 
     stompClient.subscribe('/topic/temp-and-hum', function (data) {
         console.log("Temp: " + data)
@@ -54,8 +32,10 @@ function subscribeToTempAndHumUpdates() {
 }
 
 $(function () {
-    connect();
-//    subscribeToTempAndHumUpdates()
+    var promise = connect();
+    promise.then(function () {
+        subscribeToTempAndHumUpdates();
+    })
 
     // $("#motion-subscribe").click(function () {
     //     subscribeToMotionDetection();

@@ -22,15 +22,15 @@ import java.util.concurrent.TimeUnit
  */
 @Log4j2
 @Controller
-class TemperatureAndHumidityController @Autowired constructor(val sensor: TemperatureAndHumiditySensor,
-                                                              val template: SimpMessagingTemplate,
-                                                              val logger: Logger,
+class TemperatureAndHumidityController @Autowired constructor(private val sensor: TemperatureAndHumiditySensor,
+                                                              private val template: SimpMessagingTemplate,
+                                                              private val logger: Logger,
 
                                                               @Qualifier("tempAndHumScheduler")
-                                                              val scheduler: TaskScheduler,
+                                                              private val scheduler: TaskScheduler,
 
                                                               @Value("\${temp.update.rate:1}")
-                                                              val rate: Long) {
+                                                              private val rate: Long) {
 
     @Volatile
     private lateinit var future: ScheduledFuture<*>
