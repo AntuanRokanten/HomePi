@@ -27,6 +27,9 @@
             margin: 20px
          }
 
+
+
+
     </style>
 </head>
 <body>
@@ -45,11 +48,13 @@
             <div class="mdl-cell mdl-cell--4-col mdl-color--white mdl-shadow--4dp mdl-color-text--grey-800"
                  style="padding : 40px; height: 160px">
                 <div class="mdl-grid">
-                    <div class="time mdl-cell mdl-cell--12-col mdl-typography--text-center" style="font-size: 70px">
+                    <div class="time mdl-cell mdl-cell--12-col mdl-typography--text-center time"
+                         style="font-size: 70px">
                         12:51 pm
                     </div>
                     <br><br><br>
-                    <div class="date mdl-cell mdl-cell--12-col mdl-typography--text-center">Wednesday 01.08.2017</div>
+                    <div class="date mdl-cell mdl-cell--12-col mdl-typography--text-center"><span id="week-day">Wednesday</span>
+                        <span id="date">01.08.2017</span></div>
                 </div>
             </div>
 
@@ -65,33 +70,36 @@
                     <p style="font-size: 30px">
                         <i class="material-icons"
                            style="font-size: 70px; vertical-align: middle !important;">home</i>
-                        <span class="climate">+40C</span>
-                        <span class="climate">55%</span>
+                        <span class="climate" id="temp-indoors">+40C</span>
+                        <span class="climate" id="hum-indoors">55%</span>
                     </p>
                 </div>
                 <div class="mdl-color-text--grey-600">
                     <p style="font-size: 20px">
-                        Conditions: <i class="material-icons" style="vertical-align: middle !important">tag_faces</i>
+                        Conditions: <i class="material-icons" id="indoor-conditions"
+                                       style="vertical-align: middle !important">tag_faces</i>
                     </p>
                 </div>
                 <div class="mdl-color-text--grey-900">
                     <p style="font-size: 30px">
                         <i class="material-icons"
                            style="font-size: 70px; vertical-align: middle !important;">cloud</i>
-                        <span class="climate">+30C</span>
-                        <span class="climate">62%</span>
+                        <span class="climate" id="temp-outdoors">+30C</span>
+                        <span class="climate" id="hum-outdoors">62%</span>
                     </p>
                 </div>
                 <div class="mdl-color-text--grey-600">
                     <p style="font-size: 20px">
-                        Conditions: <i class="material-icons" style="vertical-align: middle !important">tag_faces</i>
+                        Conditions: <i class="material-icons" id="outdoor-conditions"
+                                       style="vertical-align: middle !important">tag_faces</i>
                     </p>
                 </div>
 
             </div>
 
 
-            <div class="mdl-cell mdl-cell--4-col mdl-color--white mdl-shadow--4dp" style="padding : 40px; height: 250px">
+            <div class="mdl-cell mdl-cell--4-col mdl-color--white mdl-shadow--4dp"
+                 style="padding : 40px; height: 330px">
                 <div class="mdl-typography--text-center" style="font-size:40px">
                     Motion detection
                 </div>
@@ -104,6 +112,19 @@
                 <div class="mdl-color-text--grey-600 mdl-typography--text-center"
                      style="font-size:15px">
                     Last motion detected at 11:32 01.08.2017
+                </div>
+                <hr>
+                <div style="margin:20px">
+                    <label for="motion-toggle-switch" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
+                        <input type="checkbox" id="motion-toggle-switch" class="mdl-switch__input" onClick={console.log("adf")}>
+                        <span class="mdl-switch__label">Enable motion detection</span>
+                    </label>
+                    <label for="motion-telegram-notification-switch"
+                           class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
+                        <input type="checkbox" id="motion-telegram-notification-switch" class="mdl-switch__input"
+                               disabled>
+                        <span class="mdl-switch__label">Enable Telegram notification</span>
+                    </label>
                 </div>
             </div>
         </div>
