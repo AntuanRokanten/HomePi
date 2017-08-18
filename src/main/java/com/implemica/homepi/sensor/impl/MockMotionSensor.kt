@@ -17,7 +17,7 @@ class MockMotionSensor(override val pin: Pin) : MotionSensor {
 
     override fun subscribeToMotionDetection(listener: Callable<Void>) {
         while (true) {
-            val delay = 3 + (10 - 3) * Random().nextDouble()
+            val delay = 15 + (25 - 15) * Random().nextDouble()
             println("----------> Next motion event in ${delay.toLong()} seconds <----------")
             Thread.sleep(TimeUnit.SECONDS.toMillis(delay.toLong()))
             listener.call()

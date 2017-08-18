@@ -23,12 +23,19 @@
 
     <style>
 
-         .climate {
+        .motion-detected {
+            background-color: #ff817b;
+        }
+
+        #motion-detection-block {
+            -webkit-transition: background 1.0s ease-in-out;
+            -ms-transition: background 1.0s ease-in-out;
+            transition: background 1.0s ease-in-out;
+        }
+
+        .climate {
             margin: 20px
-         }
-
-
-
+        }
 
     </style>
 </head>
@@ -98,7 +105,7 @@
             </div>
 
 
-            <div class="mdl-cell mdl-cell--4-col mdl-color--white mdl-shadow--4dp"
+            <div id="motion-detection-block" class="mdl-cell mdl-cell--4-col mdl-shadow--4dp"
                  style="padding : 40px; height: 330px">
                 <div class="mdl-typography--text-center" style="font-size:40px">
                     Motion detection
@@ -106,20 +113,21 @@
                 <br><br><br>
                 <div class="mdl-color-text--grey-600 mdl-typography--text-center"
                      style="font-size:20px">
-                    No motion detected
+                    <span id="motion-message">No motion detected</span>
                 </div>
                 <br><br><br>
                 <div class="mdl-color-text--grey-600 mdl-typography--text-center"
                      style="font-size:15px">
-                    Last motion detected at 11:32 01.08.2017
+                    Last motion detected at <span id="last-detection-time">11:32</span> <span id="last-detection-date">01.08.2017</span>
                 </div>
                 <hr>
                 <div style="margin:20px">
-                    <label for="motion-toggle-switch" class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
-                        <input type="checkbox" id="motion-toggle-switch" class="mdl-switch__input" onClick={console.log("adf")}>
+                    <label for="motion-toggle-switch" id="motion-toggle-switch-label"
+                           class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
+                        <input type="checkbox" id="motion-toggle-switch" class="mdl-switch__input">
                         <span class="mdl-switch__label">Enable motion detection</span>
                     </label>
-                    <label for="motion-telegram-notification-switch"
+                    <label for="motion-telegram-notification-switch" id="motion-telegram-notification-switch-label"
                            class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
                         <input type="checkbox" id="motion-telegram-notification-switch" class="mdl-switch__input"
                                disabled>
