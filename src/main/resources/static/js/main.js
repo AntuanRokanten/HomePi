@@ -61,6 +61,9 @@ function subscribeToTempAndHumUpdates() {
 
         var temp = json.temperature.celcius;
         var hum = json.humidity.value;
+
+        $("#indoor-conditions").text(getConditionsSign(temp));
+
         $("#temp-indoors").text(temp);
         $("#hum-indoors").text(hum);
     });
@@ -138,6 +141,22 @@ function checkTime(i) {
     return i;
 }
 
+function getConditionsSign(temp) {
+            var conditionsSign;
+            if (temp > 30) {
+                conditionsSign = "🔥";
+            } else if (temp > 25) {
+                conditionsSign = "😓";
+            } else if (temp > 18) {
+                conditionsSign = "🙂";
+            } else if (temp > 3) {
+                conditionsSign = "😓";
+            } else {
+                conditionsSign = "☃";
+            }
+            return conditionsSign;
+}
+
 function updateDate(date) {
     var weekday = new Array(7);
     weekday[0] =  "Sunday";
@@ -166,7 +185,7 @@ function loadWeatherDefaultLocation() {
 //     console.log("Disconnected");
 // }
 
-function loadWeather(location, woeid) {
+function loadWeather(location, woeid) { // todo check weather periodically
   $.simpleWeather({
     location: location,
     woeid: woeid,
@@ -175,6 +194,7 @@ function loadWeather(location, woeid) {
 
       $('#outdoors-icon').removeClass().addClass('icon-' + weather.code);
       $("#temp-outdoors").text(weather.temp);
+      $("#outdoor-conditions").text(getConditionsSign(weather.temp));
       $("#hum-outdoors").text(weather.humidity);
     },
     error: function(error) {
