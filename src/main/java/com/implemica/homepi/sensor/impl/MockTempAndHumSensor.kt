@@ -14,7 +14,7 @@ import java.util.*
 class MockTempAndHumSensor(override val pin: Pin) : TemperatureAndHumiditySensor {
 
     override fun temperature(): Temperature {
-        return Temperature(29 + (35 - 29) * Random().nextDouble())
+        return Temperature(Random().nextInt((35 - 29 + 1) + 29).toDouble())
     }
 
     override fun temperatureAndHumidity(): TemperatureAndHumidity {
@@ -24,7 +24,7 @@ class MockTempAndHumSensor(override val pin: Pin) : TemperatureAndHumiditySensor
     }
 
     override fun humidity(): Humidity {
-        return Humidity(30 + (80 - 30) * Random().nextDouble())
+        return Humidity(Random().nextInt((80 - 30 + 1) + 30).toDouble())
     }
 
 }

@@ -21,23 +21,35 @@ function subscribeToMotionDetection() {
     stompClient.subscribe('/topic/motion', function (data) {
         console.log("Motion event is received: " + data);
 
-        $("#motion-message").text("Motion is detected");
         var currentDate = new Date();
 
-        $("#last-detection-time").text(currentDate.toLocaleTimeString());
-        $("#last-detection-date").text(currentDate.toLocaleDateString());
+        // setting motion messages
+        $("#motion-message").text("Motion is detected");
 
+        $("#last-detection-time").text(formatTime(currentDate));
+        $("#last-detection-date").text(currentDate.toLocaleDateString());
+        $("#motion-last-detect").show();
+
+        // motion block blinking
         var motionDetectionBlock = $("#motion-detection-block");
 
         var intervalId = setInterval(function () {
             motionDetectionBlock.toggleClass("motion-detected");
+            motionDetectionBlock.toggleClass("mdl-color--white");
         }, 500);
 
+        // resetting block state
         setTimeout(function () {
-            $("#motion-message").text("No motion detected");
-            motionDetectionBlock.removeClass("motion-detected");
             clearInterval(intervalId);
-        }, 30000);
+            $("#motion-message").text("No motion detected");
+
+            if (motionDetectionBlock.hasClass('motion-detected')) {
+                motionDetectionBlock.removeClass("motion-detected");
+            }
+            if (!motionDetectionBlock.hasClass('mdl-color--white')) {
+                motionDetectionBlock.addClass("mdl-color--white");
+            }
+        }, 10000);
     });
 }
 
@@ -55,6 +67,9 @@ function subscribeToTempAndHumUpdates() {
 }
 
 $(function () {
+    startTime();
+    updateDate(new Date());
+
     var promise = connect();
     promise.then(function () {
         subscribeToTempAndHumUpdates();
@@ -89,10 +104,57 @@ $(function () {
             telNotificationSwitch.MaterialSwitch.disable();
         }
     });
+
 });
 
+function startTime() {
+        var today = new Date();
+        var currentTime = formatTime(today);
+
+        if (currentTime === "00:00:00") {
+            updateDate(today);
+        }
+
+        $("#time").text(currentTime);
+        t = setTimeout(function () {
+            startTime()
+        }, 500);
+}
+
+function formatTime(date) {
+         var h = date.getHours();
+         var m = date.getMinutes();
+         var s = date.getSeconds();
+         // add a zero in front of numbers<10
+         m = checkTime(m);
+         s = checkTime(s);
+         return h + ":" + m + ":" + s;
+}
+
+function checkTime(i) {
+    if (i < 10) {
+        i = "0" + i;
+    }
+    return i;
+}
+
+function updateDate(date) {
+    var weekday = new Array(7);
+    weekday[0] =  "Sunday";
+    weekday[1] = "Monday";
+    weekday[2] = "Tuesday";
+    weekday[3] = "Wednesday";
+    weekday[4] = "Thursday";
+    weekday[5] = "Friday";
+    weekday[6] = "Saturday";
+
+    var n = weekday[date.getDay()];
+    $("#week-day").text(n);
+    $("#date").text(date.toLocaleDateString());
+}
+
 function loadWeatherDefaultLocation() {
-    var defaultCity = 'KHARKIV'; // todo can it be injected with spring?
+    var defaultCity = 'KHARKIV';
     console.log("Requesting weather for default location: " + defaultCity);
     loadWeather(defaultCity, '');
 }
@@ -110,11 +172,8 @@ function loadWeather(location, woeid) {
     woeid: woeid,
     unit: 'c',
     success: function(weather) {
-//      html = '<h2><i class="icon-'+weather.code+'"></i> '+weather.temp+'&deg;'+weather.units.temp+'</h2>';
-//      html += '<ul><li>'+weather.city+', '+weather.region+'</li>';
-//      html += '<li class="currently">'+weather.currently+'</li>';
-//      html += '<li>'+weather.alt.temp+'&deg;C</li></ul>';
 
+      $('#outdoors-icon').removeClass().addClass('icon-' + weather.code);
       $("#temp-outdoors").text(weather.temp);
       $("#hum-outdoors").text(weather.humidity);
     },

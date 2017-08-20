@@ -1,3 +1,11 @@
+* {
+    font-family: "Roboto", "Helvetica","Arial",sans-serif;
+}
+
+body {
+    background-color: #DBF0F7;
+}
+
 @font-face {
     font-family: 'weather';
     src: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/93/artill_clean_icons-webfont.eot');
@@ -57,6 +65,15 @@
 .icon-45:before { content: "S"; }
 .icon-46:before { content: "U"; }
 .icon-47:before { content: "S"; }
+
+#outdoors-icon {
+  font-family: weather;
+  font-size: 110px;
+  font-weight: normal;
+  font-style: normal;
+  vertical-align: middle !important;
+  line-height: 1.0;
+}
 
 h1{
 	color:#0000FF;
