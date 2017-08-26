@@ -1,7 +1,6 @@
 package com.implemica.homepi.sensor.impl
 
 import com.implemica.homepi.sensor.MotionSensor
-import com.implemica.homepi.sensor.data.MotionEvent
 import com.pi4j.io.gpio.GpioFactory
 import com.pi4j.io.gpio.GpioPinDigitalInput
 import com.pi4j.io.gpio.Pin
@@ -14,7 +13,8 @@ import java.util.concurrent.Callable
  */
 class Sr501Sensor(override val pin: Pin) : MotionSensor {
 
-    lateinit var listener: Callable<MotionEvent>
+    @Volatile
+    private var subscribed = false
 
     private val pinInput: GpioPinDigitalInput by lazy {
         GpioFactory.getInstance().provisionDigitalInputPin(pin)
@@ -26,14 +26,12 @@ class Sr501Sensor(override val pin: Pin) : MotionSensor {
 
     override fun isMotionDetected() = pinInput.isHigh
 
-
+    @Synchronized
     override fun subscribeToMotionDetection(listener: Callable<Void>) {
-//        this.listener = listener
-        pinInput.addTrigger(GpioCallbackTrigger(PinState.HIGH, listener))
+        if (!subscribed) {
+            pinInput.addTrigger(GpioCallbackTrigger(PinState.HIGH, listener))
+            subscribed = true
+        }
     }
-
-//    override fun call()  {
-//        listener.call()
-//    }
 
 }

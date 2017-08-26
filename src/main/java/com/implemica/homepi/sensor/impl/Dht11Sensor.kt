@@ -39,26 +39,26 @@ class Dht11Sensor(override val pin: Pin, private val script: Path) : Temperature
     }
 
     private fun read(): String {
-        println("Reading temperature and humidity....")
-        val process = Runtime.getRuntime().exec("python ${script.toAbsolutePath()} $sensorType ${pin.address}")
+        val process = Runtime.getRuntime().exec("sudo python ${script.toAbsolutePath()} $sensorType ${pin.address}")
         process.waitFor()
 
-        println("Data is read")
-        println("Checking error stream...")
+        val stdError = BufferedReader(InputStreamReader(process.errorStream))
+                .lines()
+                .collect(Collectors.joining("\n"))
 
-        val stdError = BufferedReader(InputStreamReader(process.getErrorStream()))
-        if (stdError.lines().count() > 0) {
-            val error = stdError.lines().collect(Collectors.joining("\n"))
-            throw SensorReadError(error)
+        if (!stdError.isEmpty()) {
+            throw SensorReadError(stdError)
         }
 
-        val stdInput = BufferedReader(InputStreamReader(process.getInputStream()))
+        val stdInput = BufferedReader(InputStreamReader(process.inputStream))
+                .lines()
+                .collect(Collectors.joining("\n"))
 
-        if (stdInput.lines().count() == 0L) {
+        if (stdInput.isEmpty()) {
             throw SensorReadError("Dht script returned no output. Script path: " + script.toAbsolutePath())
         }
 
-        return stdInput.lines().collect(Collectors.joining("\n"))
+        return stdInput
     }
 
 

@@ -6,6 +6,20 @@ body {
     background-color: #DBF0F7;
 }
 
+.motion-detected {
+    background-color: #ff817b;
+}
+
+#motion-detection-block {
+    -webkit-transition: background 1.0s ease-in-out;
+    -ms-transition: background 1.0s ease-in-out;
+    transition: background 1.0s ease-in-out;
+}
+
+.climate {
+    margin: 20px
+}
+
 @font-face {
     font-family: 'weather';
     src: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/93/artill_clean_icons-webfont.eot');
