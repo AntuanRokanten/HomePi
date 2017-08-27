@@ -38,7 +38,7 @@
     <main class="mdl-layout__content">
         <div class="mdl-grid">
             <div class="mdl-cell mdl-cell--4-col mdl-cell--8-col-tablet mdl-color--white mdl-shadow--4dp mdl-color-text--grey-800"
-                 style="padding : 40px; height: 160px">
+                 style="padding-top : 40px; height: 160px">
                 <div class="mdl-grid">
                     <div class="time mdl-cell mdl-cell--12-col mdl-typography--text-center">
                         <span id="time" style="font-size: 70px">12:51:12</span>
@@ -52,38 +52,29 @@
 
             <div class="mdl-cell mdl-cell--4-col mdl-color--white mdl-shadow--4dp mdl-color-text--grey-800"
                  style="padding : 40px">
-                <div class="mdl-color-text--grey-600">
-                    <p style="font-size: 25px; margin-left: 90px">
-                        <span class="climate">Temp</span>
-                        <span class="climate">Hum</span>
-                    </p>
-                </div>
                 <div class="mdl-color-text--grey-900">
                     <p style="font-size: 30px">
                         <i class="material-icons"
-                           style="font-size: 70px; vertical-align: middle !important;">home</i>
-                        <span class="climate" id="temp-indoors">+40</span>&deg;C
-                        <span class="climate" id="hum-indoors">55</span>%
+                           style="font-size: 90px; vertical-align: middle !important;">home</i>
+                        <span class="climate temperature"><span id="temp-indoors"></span>&deg;C</span>
+                        <span class="climate humidity"><span id="hum-indoors"></span>%</span>
                     </p>
                 </div>
                 <div class="mdl-color-text--grey-600">
                     <p style="font-size: 20px">
                         Conditions: <span style="font-size:30px" id="indoor-conditions"></span>
-                        <!--<i class="material-icons" style="vertical-align: middle !important">tag_faces</i>-->
                     </p>
                 </div>
                 <div class="mdl-color-text--grey-900">
                     <p style="font-size: 30px">
-                        <!--<i class="material-icons" style="font-size: 70px; vertical-align: middle !important;">cloud</i>-->
                         <i id="outdoors-icon" class="icon-32"></i>
-                        <span class="climate" id="temp-outdoors">+30</span>&deg;C
-                        <span class="climate" id="hum-outdoors">62</span>%
+                        <span class="climate temperature"><span id="temp-outdoors"></span>&deg;C</span>
+                        <span class="climate humidity"><span id="hum-outdoors"></span>%</span>
                     </p>
                 </div>
                 <div class="mdl-color-text--grey-600">
                     <p style="font-size: 20px">
                         Conditions: <span style="font-size: 30px" id="outdoor-conditions"></span>
-                        <!--<i class="material-icons" id="outdoor-conditions" style="vertical-align: middle !important">tag_faces</i>-->
                     </p>
                 </div>
 
