@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Scope
 import org.springframework.scheduling.TaskScheduler
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
+import org.telegram.telegrambots.ApiContextInitializer
 
 /**
  * @author ant
@@ -50,6 +51,7 @@ open class App {
 }
 
 fun main(args: Array<String>) {
+    ApiContextInitializer.init()
     SpringApplication.run(App::class.java, *args)
 }
 

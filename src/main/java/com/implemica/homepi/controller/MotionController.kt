@@ -2,6 +2,7 @@ package com.implemica.homepi.controller
 
 import com.implemica.homepi.sensor.MotionSensor
 import com.implemica.homepi.sensor.data.MotionEvent
+import com.implemica.homepi.service.TelegramBot
 import org.slf4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.messaging.handler.annotation.MessageMapping
@@ -16,15 +17,23 @@ import java.util.concurrent.Callable
 @Controller
 class MotionController @Autowired constructor(private val sensor: MotionSensor,
                                               private val template: SimpMessagingTemplate,
+                                              private val telegramBot: TelegramBot,
                                               private val logger: Logger) {
 
-    @MessageMapping("/motion-subscribe")
+    @Volatile private var notifyTelegram = false
+
+    @MessageMapping("/motion-subscribe") // todo inject these values. also to js
     fun subscribe() {
         logger.info("Subscribing to motion events notifications")
 
         sensor.subscribeToMotionDetection(Callable<Void> {
             logger.info("Motion is detected")
             template.convertAndSend("/topic/motion", MotionEvent())
+
+            if (notifyTelegram) {
+                telegramBot.notifyMotionDetected()
+            }
+
             null
         })
     }
