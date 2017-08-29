@@ -3,6 +3,6 @@ package com.implemica.homepi.service
 /**
  * @author ant
  */
-interface TelegramBot {
+interface ITelegramBot {
     fun notifyMotionDetected()
 }

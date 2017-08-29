@@ -1,12 +1,14 @@
 package com.implemica.homepi.service
 
+import com.implemica.homepi.sensor.MotionSensor
+import com.implemica.homepi.sensor.TemperatureAndHumiditySensor
+import com.pengrad.telegrambot.TelegramBot
+import com.pengrad.telegrambot.TelegramBotAdapter
+import com.pengrad.telegrambot.UpdatesListener
+import com.pengrad.telegrambot.request.SendMessage
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
-import org.telegram.telegrambots.TelegramBotsApi
-import org.telegram.telegrambots.api.methods.send.SendMessage
-import org.telegram.telegrambots.api.objects.Update
-import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import javax.annotation.PostConstruct
 
 /**
@@ -14,25 +16,38 @@ import javax.annotation.PostConstruct
  */
 @Component
 class TelegramBotImpl @Autowired constructor(
+        private val motionSensor: MotionSensor,
+        private val tempAndHumSensor: TemperatureAndHumiditySensor,
         @Value("\${telegram.bot.token}")
         private val token: String,
-        @Value("\${telegram.bot.token}")
-        private val username: String) : TelegramLongPollingBot(), TelegramBot {
+        @Value("#{'\${telegram.chat.ids}'.split(',')}")
+        private val chatIds: List<String>) : ITelegramBot {
 
-    override fun notifyMotionDetected() {
-        sendApiMethod(SendMessage(0, "Motion is detected"))
-    }
+    lateinit var bot: TelegramBot
 
     @PostConstruct
     fun init() {
-        TelegramBotsApi().registerBot(this)
+        bot = TelegramBotAdapter.build(token)
+        bot.setUpdatesListener { messages ->
+            messages.forEach {
+                val chatId = it.message().chat().id()
+                val messageText = it.message().text()
+
+                when (messageText) {
+                    "/lastmotion" -> bot.execute(SendMessage(chatId, motionSensor.lastMotionDate.toString())) // todo
+                    "/tempindoors" -> bot.execute(SendMessage(chatId, tempAndHumSensor.temperature().toString()))
+                    "/humindoors" -> bot.execute(SendMessage(chatId, tempAndHumSensor.humidity().toString()))
+                    "/tempandhumindoors" -> bot.execute(SendMessage(chatId, tempAndHumSensor.temperatureAndHumidity().toString()))
+                    else -> bot.execute(SendMessage(chatId, "\uD83D\uDE45 I am not sure if I can process your command $messageText. Try again \uD83D\uDE01"))
+                }
+            }
+            return@setUpdatesListener UpdatesListener.CONFIRMED_UPDATES_ALL
+        }
+
     }
 
-    override fun getBotToken() = token
-
-    override fun getBotUsername() = username
-
-    override fun onUpdateReceived(update: Update) {
-        println("New telegram message received ${update.message}")
+    override fun notifyMotionDetected() {
+        chatIds.forEach { bot.execute(SendMessage(it, "HomePi detected a new motion event")) }
     }
+
 }

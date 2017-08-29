@@ -70,6 +70,10 @@ function subscribeToTempAndHumUpdates() {
     });
 }
 
+function disableTelegramNotification() {
+    stompClient.send("/app/disable-telegram-notification");
+}
+
 $(function () {
     startTime();
     updateDate(new Date());
@@ -106,6 +110,7 @@ $(function () {
             if (motionSubscription) {
                 console.log("Unsubscribing from motion detection");
 
+                disableTelegramNotification();
                 motionSubscription.unsubscribe();
                 motionSubscription = null;
             } else {
@@ -116,6 +121,15 @@ $(function () {
             telNotificationSwitch.MaterialSwitch.disable();
         }
     });
+
+    $('#motion-telegram-notification-switch').change(function () {
+        if ($(this).is(':checked')) {
+            stompClient.send("/app/enable-telegram-notification");
+        } else {
+            disableTelegramNotification();
+        }
+
+    })
 
 });
 
