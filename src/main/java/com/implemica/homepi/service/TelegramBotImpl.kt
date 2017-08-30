@@ -6,6 +6,7 @@ import com.pengrad.telegrambot.TelegramBot
 import com.pengrad.telegrambot.TelegramBotAdapter
 import com.pengrad.telegrambot.UpdatesListener
 import com.pengrad.telegrambot.request.SendMessage
+import com.pengrad.telegrambot.request.SendPhoto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -43,11 +44,16 @@ class TelegramBotImpl @Autowired constructor(
             }
             return@setUpdatesListener UpdatesListener.CONFIRMED_UPDATES_ALL
         }
-
     }
 
-    override fun notifyMotionDetected() {
-        chatIds.forEach { bot.execute(SendMessage(it, "HomePi detected a new motion event")) }
-    }
+    override fun notifyMotionDetected(picture: ByteArray?) {
+        bot.execute(SendPhoto(12, picture))
+        chatIds.forEach({ chatId ->
+            bot.execute(SendMessage(chatId, "HomePi detected a new motion event"))
 
+            picture?.let {
+                bot.execute(SendPhoto(chatId, it))
+            }
+        })
+    }
 }

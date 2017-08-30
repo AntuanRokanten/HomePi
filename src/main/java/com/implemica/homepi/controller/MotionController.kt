@@ -2,6 +2,7 @@ package com.implemica.homepi.controller
 
 import com.implemica.homepi.sensor.MotionSensor
 import com.implemica.homepi.sensor.data.MotionEvent
+import com.implemica.homepi.service.Camera
 import com.implemica.homepi.service.ITelegramBot
 import org.slf4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,6 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger
 class MotionController @Autowired constructor(private val sensor: MotionSensor,
                                               private val template: SimpMessagingTemplate,
                                               private val telegramBot: ITelegramBot,
+                                              private val camera: Camera,
                                               private val logger: Logger) {
 
     @Volatile private var lastMotionDate: LocalDateTime? = null
@@ -34,7 +36,8 @@ class MotionController @Autowired constructor(private val sensor: MotionSensor,
             template.convertAndSend("/topic/motion", MotionEvent())
 
             if (telegramEnableReqNum.get() > 0) {
-                telegramBot.notifyMotionDetected()
+                val picture = camera.takePicture()
+                telegramBot.notifyMotionDetected(picture)
             }
         })
     }
