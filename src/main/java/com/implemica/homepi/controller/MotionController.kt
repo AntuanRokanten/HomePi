@@ -1,7 +1,7 @@
 package com.implemica.homepi.controller
 
-import com.implemica.homepi.sensor.MotionSensor
-import com.implemica.homepi.sensor.data.MotionEvent
+import com.implemica.homepi.gpio.sensor.MotionSensor
+import com.implemica.homepi.gpio.sensor.data.MotionEvent
 import com.implemica.homepi.service.Camera
 import com.implemica.homepi.service.ITelegramBot
 import org.slf4j.Logger

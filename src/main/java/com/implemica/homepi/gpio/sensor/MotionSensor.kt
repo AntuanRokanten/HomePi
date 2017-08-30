@@ -1,5 +1,6 @@
-package com.implemica.homepi.sensor
+package com.implemica.homepi.gpio.sensor
 
+import com.implemica.homepi.gpio.GpioElement
 import java.time.LocalDateTime
 
 /**
@@ -7,7 +8,7 @@ import java.time.LocalDateTime
  *
  * @author ant
  */
-interface MotionSensor : Sensor {
+interface MotionSensor : GpioElement {
 
     /**
      * Date of the last motion event detected by the sensor

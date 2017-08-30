@@ -1,10 +1,10 @@
-package com.implemica.homepi.sensor.impl
+package com.implemica.homepi.gpio.sensor.impl
 
-import com.implemica.homepi.sensor.SensorReadError
-import com.implemica.homepi.sensor.TemperatureAndHumiditySensor
-import com.implemica.homepi.sensor.data.Humidity
-import com.implemica.homepi.sensor.data.Temperature
-import com.implemica.homepi.sensor.data.TemperatureAndHumidity
+import com.implemica.homepi.gpio.sensor.SensorReadError
+import com.implemica.homepi.gpio.sensor.TemperatureAndHumiditySensor
+import com.implemica.homepi.gpio.sensor.data.Humidity
+import com.implemica.homepi.gpio.sensor.data.Temperature
+import com.implemica.homepi.gpio.sensor.data.TemperatureAndHumidity
 import com.pi4j.io.gpio.Pin
 import java.io.BufferedReader
 import java.io.InputStreamReader

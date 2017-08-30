@@ -1,7 +1,7 @@
 package com.implemica.homepi.controller
 
-import com.implemica.homepi.sensor.TemperatureAndHumiditySensor
-import com.implemica.homepi.sensor.data.TemperatureAndHumidity
+import com.implemica.homepi.gpio.sensor.TemperatureAndHumiditySensor
+import com.implemica.homepi.gpio.sensor.data.TemperatureAndHumidity
 import groovy.util.logging.Log4j2
 import org.slf4j.Logger
 import org.springframework.beans.factory.annotation.Autowired

@@ -1,7 +1,8 @@
-package com.implemica.homepi.service
+package com.implemica.homepi.service.impl
 
-import com.implemica.homepi.sensor.MotionSensor
-import com.implemica.homepi.sensor.TemperatureAndHumiditySensor
+import com.implemica.homepi.gpio.sensor.MotionSensor
+import com.implemica.homepi.gpio.sensor.TemperatureAndHumiditySensor
+import com.implemica.homepi.service.ITelegramBot
 import com.pengrad.telegrambot.TelegramBot
 import com.pengrad.telegrambot.TelegramBotAdapter
 import com.pengrad.telegrambot.UpdatesListener
@@ -16,7 +17,7 @@ import javax.annotation.PostConstruct
  * @author ant
  */
 @Component
-class TelegramBotImpl @Autowired constructor(
+class HomePiBot @Autowired constructor(
         private val motionSensor: MotionSensor,
         private val tempAndHumSensor: TemperatureAndHumiditySensor,
         @Value("\${telegram.bot.token}")
@@ -35,7 +36,8 @@ class TelegramBotImpl @Autowired constructor(
                 val messageText = it.message().text()
 
                 when (messageText) {
-                    "/lastmotion" -> bot.execute(SendMessage(chatId, motionSensor.lastMotionDate.toString())) // todo
+                    "/lastmotion" -> bot.execute(SendMessage(chatId, motionSensor.lastMotionDate.toString())) // todo format messages
+                    "/start" -> bot.execute(SendMessage(chatId, "Sup! \uD83D\uDD96 Here you can get the data registered by HomePi sensors \uD83D\uDE4F")) // todo
                     "/tempindoors" -> bot.execute(SendMessage(chatId, tempAndHumSensor.temperature().toString()))
                     "/humindoors" -> bot.execute(SendMessage(chatId, tempAndHumSensor.humidity().toString()))
                     "/tempandhumindoors" -> bot.execute(SendMessage(chatId, tempAndHumSensor.temperatureAndHumidity().toString()))
@@ -46,13 +48,18 @@ class TelegramBotImpl @Autowired constructor(
         }
     }
 
-    override fun notifyMotionDetected(picture: ByteArray?) {
-        bot.execute(SendPhoto(12, picture))
+    override fun notifyMotionDetected(picture: ByteArray?, vararg faces: ByteArray) {
         chatIds.forEach({ chatId ->
-            bot.execute(SendMessage(chatId, "HomePi detected a new motion event"))
+            var msg = "HomePi detected a new motion event."
+            if (!faces.isEmpty()) {
+                msg += " Number of detected faces is ${faces.size}."
+            }
+            bot.execute(SendMessage(chatId, msg))
 
             picture?.let {
                 bot.execute(SendPhoto(chatId, it))
+
+                faces.forEach { face -> bot.execute(SendPhoto(chatId, face)) }
             }
         })
     }

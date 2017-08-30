@@ -1,4 +1,4 @@
-package com.implemica.homepi.sensor
+package com.implemica.homepi.gpio.sensor
 
 /**
  * Exception denotes error while taking measures from sensor

@@ -1,6 +1,6 @@
-package com.implemica.homepi.sensor.impl
+package com.implemica.homepi.gpio.sensor.impl
 
-import com.implemica.homepi.sensor.MotionSensor
+import com.implemica.homepi.gpio.sensor.MotionSensor
 import com.pi4j.io.gpio.GpioFactory
 import com.pi4j.io.gpio.GpioPinDigitalInput
 import com.pi4j.io.gpio.Pin
@@ -23,7 +23,7 @@ class Sr501Sensor(override val pin: Pin) : MotionSensor {
         }
 
     private val pinInput: GpioPinDigitalInput by lazy {
-        GpioFactory.getInstance().provisionDigitalInputPin(pin)
+        GpioFactory.getInstance().provisionDigitalInputPin(pin) // todo inject gpio controller
     }
 
     override fun unsubscribeFromMotionDetection() {

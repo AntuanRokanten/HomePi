@@ -1,4 +1,4 @@
-package com.implemica.homepi.sensor.data
+package com.implemica.homepi.gpio.sensor.data
 
 /**
  * Temperature.

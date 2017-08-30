@@ -1,4 +1,4 @@
-package com.implemica.homepi.sensor
+package com.implemica.homepi.gpio
 
 import com.pi4j.io.gpio.Pin
 
@@ -7,7 +7,7 @@ import com.pi4j.io.gpio.Pin
  *
  * @author ant
  */
-interface Sensor {
+interface GpioElement {
 
     /**
      * Pin to which sensor is connected

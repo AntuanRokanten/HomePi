@@ -1,6 +1,6 @@
-package com.implemica.homepi.sensor
+package com.implemica.homepi.gpio.sensor
 
-import com.implemica.homepi.sensor.data.TemperatureAndHumidity
+import com.implemica.homepi.gpio.sensor.data.TemperatureAndHumidity
 
 /**
  * Sensor for measuring both humidity and temperature

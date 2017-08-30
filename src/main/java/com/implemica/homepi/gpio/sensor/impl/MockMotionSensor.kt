@@ -1,6 +1,6 @@
-package com.implemica.homepi.sensor.impl
+package com.implemica.homepi.gpio.sensor.impl
 
-import com.implemica.homepi.sensor.MotionSensor
+import com.implemica.homepi.gpio.sensor.MotionSensor
 import com.pi4j.io.gpio.Pin
 import java.time.LocalDateTime
 import java.util.*

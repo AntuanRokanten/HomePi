@@ -1,12 +1,13 @@
 package com.implemica.homepi
 
-import com.implemica.homepi.sensor.MotionSensor
-import com.implemica.homepi.sensor.TemperatureAndHumiditySensor
-import com.implemica.homepi.sensor.impl.MockMotionSensor
-import com.implemica.homepi.sensor.impl.MockTempAndHumSensor
-import com.pi4j.io.gpio.RaspiPin.GPIO_17
-import com.pi4j.io.gpio.RaspiPin.GPIO_29
-import org.opencv.core.Core
+import com.implemica.homepi.gpio.led.LedSet
+import com.implemica.homepi.gpio.led.impl.Rl150Led
+import com.implemica.homepi.gpio.sensor.MotionSensor
+import com.implemica.homepi.gpio.sensor.TemperatureAndHumiditySensor
+import com.implemica.homepi.gpio.sensor.impl.MockMotionSensor
+import com.implemica.homepi.gpio.sensor.impl.MockTempAndHumSensor
+import com.pi4j.io.gpio.RaspiPin.*
+import nu.pattern.OpenCV
 import org.opencv.objdetect.CascadeClassifier
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -49,9 +50,13 @@ open class App {
     open fun logger(ip: InjectionPoint): Logger =
             LoggerFactory.getLogger(ip.member.name) // warning: will not work with field injection
 
+    @Bean
+    open fun ledSet() = LedSet(Rl150Led(GPIO_00), Rl150Led(GPIO_01), Rl150Led(GPIO_02), Rl150Led(GPIO_03))
+
 }
 
 fun main(args: Array<String>) {
+    OpenCV.loadLibrary()
     SpringApplication.run(App::class.java, *args)
 }
 

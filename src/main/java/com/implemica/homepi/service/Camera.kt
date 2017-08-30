@@ -5,7 +5,7 @@ package com.implemica.homepi.service
  *
  * @author ant
  */
-interface Camera {
+interface Camera { // todo add property with id
 
     /**
      * Takes picture from the camera
