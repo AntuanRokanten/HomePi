@@ -25,7 +25,7 @@ interface MotionSensor : GpioElement {
      *
      * @param listener listener to be called when motion is detected
      */
-    fun subscribeToMotionDetection(listener: Runnable)
+    fun subscribeToMotionDetection(listener: ()-> Unit)
 
     /**
      * Unsubscribes from motion detection event

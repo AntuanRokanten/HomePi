@@ -34,7 +34,7 @@ class Sr501Sensor(override val pin: Pin) : MotionSensor {
     override fun isMotionDetected() = pinInput.isHigh
 
     @Synchronized
-    override fun subscribeToMotionDetection(listener: Runnable) {
+    override fun subscribeToMotionDetection(listener: ()-> Unit) {
         if (!subscribed) {
             pinInput.addTrigger(GpioCallbackTrigger(PinState.HIGH, MotionListener(this, listener)))
             subscribed = true
@@ -46,10 +46,10 @@ class Sr501Sensor(override val pin: Pin) : MotionSensor {
 /**
  * Listener which is being invoked when the motion is detected.
  */
-private class MotionListener constructor(val motionSensor: MotionSensor, val listener: Runnable) : Callable<Void?> {
+private class MotionListener constructor(val motionSensor: MotionSensor, val listener: ()-> Unit) : Callable<Void?> {
 
     override fun call(): Void? {
-        listener.run()
+        listener.invoke()
         motionSensor.lastMotionDate = LocalDateTime.now()
         return null
     }

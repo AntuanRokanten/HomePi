@@ -33,7 +33,7 @@ class MotionController @Autowired constructor(private val sensor: MotionSensor,
     fun subscribe() {
         logger.info("Subscribing to motion events notifications")
 
-        sensor.subscribeToMotionDetection(Runnable {
+        sensor.subscribeToMotionDetection({
             logger.info("Motion is detected")
             lastMotionDate = LocalDateTime.now()
             ledSet.blinkAll(InSequenceBlinkMode(400), 500, 20000)
