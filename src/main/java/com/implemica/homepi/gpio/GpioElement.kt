@@ -10,8 +10,8 @@ import com.pi4j.io.gpio.Pin
 interface GpioElement {
 
     /**
-     * Pin to which sensor is connected
-     * // todo specify the pinout
+     * Pin to which sensor is connected.
+     * Pi4J/WiringPi pinout is used.
      */
     val pin: Pin
 
