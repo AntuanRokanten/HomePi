@@ -1,5 +1,7 @@
 package com.implemica.homepi.controller
 
+import com.implemica.homepi.gpio.led.InSequenceBlinkMode
+import com.implemica.homepi.gpio.led.LedSet
 import com.implemica.homepi.gpio.sensor.MotionSensor
 import com.implemica.homepi.gpio.sensor.data.MotionEvent
 import com.implemica.homepi.service.Camera
@@ -20,6 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger
 class MotionController @Autowired constructor(private val sensor: MotionSensor,
                                               private val template: SimpMessagingTemplate,
                                               private val telegramBot: ITelegramBot,
+                                              private val ledSet: LedSet,
                                               private val camera: Camera,
                                               private val logger: Logger) {
 
@@ -33,6 +36,7 @@ class MotionController @Autowired constructor(private val sensor: MotionSensor,
         sensor.subscribeToMotionDetection(Runnable {
             logger.info("Motion is detected")
             lastMotionDate = LocalDateTime.now()
+            ledSet.blinkAll(InSequenceBlinkMode(400), 500, 20000)
             template.convertAndSend("/topic/motion", MotionEvent())
 
             if (telegramEnableReqNum.get() > 0) {

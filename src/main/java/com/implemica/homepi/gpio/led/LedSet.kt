@@ -5,7 +5,7 @@ package com.implemica.homepi.gpio.led
  */
 class LedSet constructor(vararg val leds: Led) {
 
-    fun blinkLeds(mode: LedBlinkMode, toggleDuration: Long, duration: Long) {
+    fun blinkAll(mode: LedBlinkMode, toggleDuration: Long, duration: Long) {
         when (mode) {
             is SimultaneousBlinkMode -> {
                 leds.forEach { it.blink(toggleDuration, duration) }
