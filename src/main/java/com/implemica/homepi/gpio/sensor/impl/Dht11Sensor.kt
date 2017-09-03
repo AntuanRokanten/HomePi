@@ -14,6 +14,7 @@ import java.util.stream.Collectors
 /**
  * DHT11 Temperature and humidity sensor
  *
+ * @property pin standard RPI 3B GPIO pinout is used here.
  * @author ant
  */
 class Dht11Sensor(override val pin: Pin, private val script: Path) : TemperatureAndHumiditySensor {

@@ -36,7 +36,8 @@ class MotionController @Autowired constructor(private val sensor: MotionSensor,
         sensor.subscribeToMotionDetection({
             logger.info("Motion is detected")
             lastMotionDate = LocalDateTime.now()
-            ledSet.blinkAll(InSequenceBlinkMode(400), 500, 20000)
+
+            ledSet.blinkAll(InSequenceBlinkMode(100), 500, 10000)
             template.convertAndSend("/topic/motion", MotionEvent())
 
             if (telegramEnableReqNum.get() > 0) {

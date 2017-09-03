@@ -15,7 +15,6 @@ import javax.annotation.PreDestroy
 @Component
 class DefaultCamera constructor(private val cameraId: Int = 0) : Camera {
 
-    //    , @Qualifier("faceClassifier") private val frontalFaceClassifier: CascadeClassifier
     lateinit var capture: VideoCapture
 
     @PostConstruct

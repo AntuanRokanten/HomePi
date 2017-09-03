@@ -11,7 +11,7 @@ interface GpioElement {
 
     /**
      * Pin to which sensor is connected.
-     * Pi4J/WiringPi pinout is used.
+     * Pi4J/WiringPi pinout is used (if different pinout is not specified in the doc).
      */
     val pin: Pin
 
