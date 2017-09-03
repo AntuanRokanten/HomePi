@@ -1,14 +1,17 @@
 package com.implemica.homepi
 
+import com.implemica.homepi.gpio.GpioMock
 import com.implemica.homepi.gpio.led.LedSet
 import com.implemica.homepi.gpio.led.impl.Rl150Led
 import com.implemica.homepi.gpio.sensor.MotionSensor
 import com.implemica.homepi.gpio.sensor.TemperatureAndHumiditySensor
+import com.implemica.homepi.gpio.sensor.impl.Dht11Sensor
 import com.implemica.homepi.gpio.sensor.impl.MockMotionSensor
 import com.implemica.homepi.gpio.sensor.impl.MockTempAndHumSensor
+import com.implemica.homepi.gpio.sensor.impl.Sr501Sensor
+import com.pi4j.io.gpio.GpioController
+import com.pi4j.io.gpio.GpioFactory
 import com.pi4j.io.gpio.RaspiPin.*
-import nu.pattern.OpenCV
-import org.opencv.objdetect.CascadeClassifier
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.InjectionPoint
@@ -18,6 +21,8 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Scope
 import org.springframework.scheduling.TaskScheduler
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
+import java.nio.file.Paths
+
 
 /**
  * @author ant
@@ -26,24 +31,45 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 open class App {
 
     @Bean
-    open fun motionSensor(): MotionSensor {
-//        return Sr501Sensor(GPIO_29)
+    @DefaultProfile
+    open fun mockMotionSensor(): MotionSensor {
         return MockMotionSensor(GPIO_29)
     }
 
     @Bean
-    open fun temperatureAndHumiditySensor(): TemperatureAndHumiditySensor {
-//        val scriptPath = "/python/AdafruitDHT.py"
-//        val script = this.javaClass.getResource(scriptPath) ?: throw ExceptionInInitializerError("Unable to find Python script in $scriptPath")
-//        return Dht11Sensor(GPIO_17, Paths.get(script.toURI()))
+    @RpiProfile
+    open fun motionSensor(gpio: GpioController): MotionSensor {
+        return Sr501Sensor(GPIO_29, gpio)
+    }
+
+    @Bean
+    @DefaultProfile
+    open fun mockTempAndHumSensor(): TemperatureAndHumiditySensor {
         return MockTempAndHumSensor(GPIO_17)
+    }
+
+    @Bean
+    @RpiProfile
+    open fun temperatureAndHumiditySensor(): TemperatureAndHumiditySensor {
+        val scriptPath = "/python/AdafruitDHT.py"
+        val script = this.javaClass.getResource(scriptPath) ?: throw ExceptionInInitializerError("Unable to find Python script in $scriptPath")
+        return Dht11Sensor(GPIO_17, Paths.get(script.toURI()))
+    }
+
+    @Bean
+    @DefaultProfile
+    open fun mokcGpioController(): GpioController {
+        return GpioMock()
+    }
+
+    @Bean
+    @RpiProfile
+    open fun gpioController(): GpioController {
+        return GpioFactory.getInstance()
     }
 
     @Bean("tempAndHumScheduler")
     open fun temperatureTaskScheduler(): TaskScheduler = ThreadPoolTaskScheduler()
-
-    @Bean("faceClassifier")
-    open fun faceClassifier() = CascadeClassifier("cv/haarcascade_frontalface_alt.xml")
 
     @Bean
     @Scope("prototype")
@@ -51,13 +77,11 @@ open class App {
             LoggerFactory.getLogger(ip.member.name) // warning: will not work with field injection
 
     @Bean
-    open fun ledSet() = LedSet(Rl150Led(GPIO_00), Rl150Led(GPIO_01), Rl150Led(GPIO_02), Rl150Led(GPIO_03))
-
+    open fun ledSet(gpio: GpioController): LedSet {
+        return LedSet(Rl150Led(GPIO_22, gpio), Rl150Led(GPIO_23, gpio), Rl150Led(GPIO_24, gpio), Rl150Led(GPIO_25, gpio))
+    }
 }
 
 fun main(args: Array<String>) {
-    OpenCV.loadLibrary()
     SpringApplication.run(App::class.java, *args)
 }
-
-
