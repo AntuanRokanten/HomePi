@@ -2,7 +2,7 @@ package com.implemica.homepi
 
 import com.implemica.homepi.gpio.GpioMock
 import com.implemica.homepi.gpio.led.LedSet
-import com.implemica.homepi.gpio.led.impl.Rl150Led
+import com.implemica.homepi.gpio.led.impl.Rl50Led
 import com.implemica.homepi.gpio.sensor.MotionSensor
 import com.implemica.homepi.gpio.sensor.TemperatureAndHumiditySensor
 import com.implemica.homepi.gpio.sensor.impl.Dht11Sensor
@@ -78,7 +78,7 @@ open class App {
 
     @Bean
     open fun ledSet(gpio: GpioController): LedSet {
-        return LedSet(Rl150Led(GPIO_22, gpio), Rl150Led(GPIO_23, gpio), Rl150Led(GPIO_24, gpio), Rl150Led(GPIO_25, gpio))
+        return LedSet(Rl50Led(GPIO_22, gpio), Rl50Led(GPIO_23, gpio), Rl50Led(GPIO_24, gpio), Rl50Led(GPIO_25, gpio))
     }
 }
 

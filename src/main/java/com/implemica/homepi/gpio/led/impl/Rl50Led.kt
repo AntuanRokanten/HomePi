@@ -11,7 +11,7 @@ import javax.annotation.PreDestroy
  *
  * @author ant
  */
-class Rl150Led(override val pin: Pin, private val gpio: GpioController) : Led {
+class Rl50Led(override val pin: Pin, private val gpio: GpioController) : Led {
 
     override val isTurnedOn: Boolean
         get() = outputPin.isHigh
