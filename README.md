@@ -1,6 +1,6 @@
 # HomePi
 
-When deployed on Raspberry Pi, gather information from the sensors connected and provides web interface for displaying data.
+When deployed on Raspberry Pi, gathers information from the sensors connected and provides web interface for displaying data.
 
 Also hosts [RPiHomeAutomationBot](https://telegram.me/RPiHomeAutomationBot) telegram bot which provides interface for querying sensors' state.
 
