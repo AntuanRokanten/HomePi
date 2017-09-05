@@ -11,11 +11,14 @@ Also hosts [RPiHomeAutomationBot](https://telegram.me/RPiHomeAutomationBot) tele
 ### Leds
 RL50-TUR1TYG136 [Specs](http://polaris-light.com.ua/image/data/pdf/496.pdf)
 
+**[Full Bill of Materials](https://github.com/AntuanRokanten/HomePi/blob/master/circuit/HomePi_bom.html)**
+
 ## Circuit
-TODO
+![Circuit](https://github.com/AntuanRokanten/HomePi/blob/master/circuit/HomePi_circuit.jpg)
 
 ## Installation
 TODO
+
 
 ## Author
 **[Anton G.](https://github.com/AntuanRokanten)**
