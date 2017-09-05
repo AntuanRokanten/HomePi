@@ -6,6 +6,7 @@ import com.pi4j.io.gpio.GpioPinDigitalInput
 import com.pi4j.io.gpio.Pin
 import com.pi4j.io.gpio.PinState
 import com.pi4j.io.gpio.trigger.GpioCallbackTrigger
+import com.pi4j.util.CommandArgumentParser
 import java.time.LocalDateTime
 import java.util.concurrent.Callable
 import javax.annotation.PreDestroy
@@ -24,7 +25,9 @@ class Sr501Sensor(override val pin: Pin, private val gpio: GpioController) : Mot
         }
 
     private val pinInput: GpioPinDigitalInput by lazy {
-        gpio.provisionDigitalInputPin(pin, "${pin.address} ${this.javaClass.simpleName}")
+        val inputPin = gpio.provisionDigitalInputPin(pin, "${pin.address} ${this.javaClass.simpleName}")
+        inputPin.setShutdownOptions(true, PinState.LOW)
+        inputPin
     }
 
     override fun unsubscribeFromMotionDetection() {

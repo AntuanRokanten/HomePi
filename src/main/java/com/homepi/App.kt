@@ -32,21 +32,15 @@ open class App {
 
     @Bean
     @DefaultProfile
-    open fun mockMotionSensor(): MotionSensor {
-        return MockMotionSensor(GPIO_29)
-    }
+    open fun mockMotionSensor(): MotionSensor = MockMotionSensor(GPIO_29)
 
     @Bean
     @RpiProfile
-    open fun motionSensor(gpio: GpioController): MotionSensor {
-        return Sr501Sensor(GPIO_29, gpio)
-    }
+    open fun motionSensor(gpio: GpioController): MotionSensor = Sr501Sensor(GPIO_29, gpio)
 
     @Bean
     @DefaultProfile
-    open fun mockTempAndHumSensor(): TemperatureAndHumiditySensor {
-        return MockTempAndHumSensor(GPIO_17)
-    }
+    open fun mockTempAndHumSensor(): TemperatureAndHumiditySensor = MockTempAndHumSensor(GPIO_17)
 
     @Bean
     @RpiProfile
@@ -58,15 +52,11 @@ open class App {
 
     @Bean
     @DefaultProfile
-    open fun mokcGpioController(): GpioController {
-        return GpioMock()
-    }
+    open fun mokcGpioController(): GpioController = GpioMock()
 
     @Bean
     @RpiProfile
-    open fun gpioController(): GpioController {
-        return GpioFactory.getInstance()
-    }
+    open fun gpioController(): GpioController = GpioFactory.getInstance()
 
     @Bean("tempAndHumScheduler")
     open fun temperatureTaskScheduler(): TaskScheduler = ThreadPoolTaskScheduler()
@@ -77,9 +67,8 @@ open class App {
             LoggerFactory.getLogger(ip.member.name) // warning: will not work with field injection
 
     @Bean
-    open fun ledSet(gpio: GpioController): LedSet {
-        return LedSet(Rl50Led(GPIO_22, gpio), Rl50Led(GPIO_23, gpio), Rl50Led(GPIO_24, gpio), Rl50Led(GPIO_25, gpio))
-    }
+    open fun ledSet(gpio: GpioController): LedSet =
+            LedSet(Rl50Led(GPIO_22, gpio), Rl50Led(GPIO_23, gpio), Rl50Led(GPIO_24, gpio), Rl50Led(GPIO_25, gpio))
 }
 
 fun main(args: Array<String>) {
