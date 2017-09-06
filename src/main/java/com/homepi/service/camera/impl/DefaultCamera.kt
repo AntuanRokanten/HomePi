@@ -1,8 +1,8 @@
-package com.homepi.service.impl
+package com.homepi.service.camera.impl
 
-import com.homepi.service.Camera
-import org.bytedeco.javacpp.BytePointer
-import org.bytedeco.javacpp.opencv_imgcodecs.imencode
+import com.homepi.service.camera.BytesFromMat
+import com.homepi.service.camera.Camera
+import com.homepi.service.camera.Frame
 import org.bytedeco.javacv.FFmpegFrameGrabber
 import org.bytedeco.javacv.FrameGrabber
 import org.bytedeco.javacv.OpenCVFrameConverter
@@ -26,16 +26,13 @@ class DefaultCamera constructor(override val deviceId: Int = 0) : Camera {
         OpenCVFrameConverter.ToMat()
     }
 
-    @Synchronized override fun takePicture(): ByteArray {
+    @Synchronized override fun takeFrame(): Frame {
         grabber.start()
         val frame = grabber.grabFrame()
         grabber.stop()
 
         val mat = toMatConverter.convert(frame)
-        val bytePointer = BytePointer()
-        imencode(".jpeg", mat, bytePointer)
-
-        return bytePointer.stringBytes
+        return Frame(BytesFromMat(mat).bytes(), frame.imageHeight, frame.imageWidth)
     }
 
 }

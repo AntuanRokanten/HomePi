@@ -9,6 +9,8 @@ import com.homepi.gpio.sensor.impl.Dht11Sensor
 import com.homepi.gpio.sensor.impl.MockMotionSensor
 import com.homepi.gpio.sensor.impl.MockTempAndHumSensor
 import com.homepi.gpio.sensor.impl.Sr501Sensor
+import com.homepi.service.objectrecognition.ObjectRecognizer
+import com.homepi.service.objectrecognition.impl.FaceRecognizer
 import com.pi4j.io.gpio.GpioController
 import com.pi4j.io.gpio.GpioFactory
 import com.pi4j.io.gpio.RaspiPin.*
@@ -21,6 +23,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Scope
 import org.springframework.scheduling.TaskScheduler
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
+import java.net.URI
 import java.nio.file.Paths
 
 
@@ -45,9 +48,8 @@ open class App {
     @Bean
     @RpiProfile
     open fun temperatureAndHumiditySensor(): TemperatureAndHumiditySensor {
-        val scriptPath = "/python/AdafruitDHT.py"
-        val script = this.javaClass.getResource(scriptPath) ?: throw ExceptionInInitializerError("Unable to find Python script in $scriptPath")
-        return Dht11Sensor(GPIO_17, Paths.get(script.toURI()))
+        val scriptUri = resourceUri("/python/AdafruitDHT.py")
+        return Dht11Sensor(GPIO_17, Paths.get(scriptUri))
     }
 
     @Bean
@@ -62,6 +64,12 @@ open class App {
     open fun temperatureTaskScheduler(): TaskScheduler = ThreadPoolTaskScheduler()
 
     @Bean
+    open fun faceRecognizer(): ObjectRecognizer {
+        val cascadeUri = resourceUri("/cv/haarcascade_frontalface_alt.xml")
+        return FaceRecognizer(Paths.get(cascadeUri))
+    }
+
+    @Bean
     @Scope("prototype")
     open fun logger(ip: InjectionPoint): Logger =
             LoggerFactory.getLogger(ip.member.name) // warning: will not work with field injection
@@ -69,6 +77,10 @@ open class App {
     @Bean
     open fun ledSet(gpio: GpioController): LedSet =
             LedSet(Rl50Led(GPIO_22, gpio), Rl50Led(GPIO_23, gpio), Rl50Led(GPIO_24, gpio), Rl50Led(GPIO_25, gpio))
+
+    private fun resourceUri(path: String): URI {
+        return this.javaClass.getResource(path).toURI() ?: throw ExceptionInInitializerError("Unable to find a resource in the following path $path")
+    }
 }
 
 fun main(args: Array<String>) {

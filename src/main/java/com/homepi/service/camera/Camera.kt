@@ -1,4 +1,4 @@
-package com.homepi.service
+package com.homepi.service.camera
 
 /**
  * Interface for interacting with camera.
@@ -15,6 +15,6 @@ interface Camera {
     /**
      * Takes picture from the camera
      */
-    fun takePicture(): ByteArray
+    fun takeFrame(): Frame
 
 }

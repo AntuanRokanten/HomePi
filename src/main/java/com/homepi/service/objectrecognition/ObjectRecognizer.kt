@@ -1,5 +1,6 @@
-package com.homepi.service
+package com.homepi.service.objectrecognition
 
+import com.homepi.service.camera.Frame
 import java.nio.file.Path
 
 /**
@@ -12,11 +13,11 @@ interface ObjectRecognizer {
     /**
      * Cascade used for object recognition
      */
-    val haarCascade: Path
+    val haarCascadePath: Path
 
     /**
      * Recognizes objects on the picture provided
      */
-    fun recognize(picture: ByteArray): List<ByteArray>
+    fun recognize(frame: Frame): Array<ByteArray>
 
 }

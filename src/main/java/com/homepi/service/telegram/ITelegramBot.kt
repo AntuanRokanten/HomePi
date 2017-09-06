@@ -1,4 +1,4 @@
-package com.homepi.service
+package com.homepi.service.telegram
 
 /**
  * @author ant

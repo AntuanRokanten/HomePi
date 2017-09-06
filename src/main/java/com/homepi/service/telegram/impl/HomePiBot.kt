@@ -1,8 +1,8 @@
-package com.homepi.service.impl
+package com.homepi.service.telegram.impl
 
 import com.homepi.gpio.sensor.MotionSensor
 import com.homepi.gpio.sensor.TemperatureAndHumiditySensor
-import com.homepi.service.ITelegramBot
+import com.homepi.service.telegram.ITelegramBot
 import com.pengrad.telegrambot.TelegramBot
 import com.pengrad.telegrambot.TelegramBotAdapter
 import com.pengrad.telegrambot.UpdatesListener
