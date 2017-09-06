@@ -5,7 +5,12 @@ package com.homepi.service
  *
  * @author ant
  */
-interface Camera { // todo add property with id
+interface Camera {
+
+    /**
+     * Id of the camera device in the system
+     */
+    val deviceId: Int
 
     /**
      * Takes picture from the camera

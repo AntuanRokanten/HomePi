@@ -37,7 +37,7 @@ class MotionController @Autowired constructor(private val sensor: MotionSensor,
             logger.info("Motion is detected")
             lastMotionDate = LocalDateTime.now()
 
-            ledSet.blinkAll(InSequenceBlinkMode(100), 500, 10000)
+            ledSet.blinkAll(InSequenceBlinkMode(100), 500, 10000) // todo not blink if no subscriptions
             template.convertAndSend("/topic/motion", MotionEvent())
 
             if (telegramEnableReqNum.get() > 0) {

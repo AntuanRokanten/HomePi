@@ -1,43 +1,41 @@
 package com.homepi.service.impl
 
 import com.homepi.service.Camera
-import org.opencv.core.Mat
-import org.opencv.core.MatOfByte
-import org.opencv.highgui.Highgui
-import org.opencv.highgui.VideoCapture
+import org.bytedeco.javacpp.BytePointer
+import org.bytedeco.javacpp.opencv_imgcodecs.imencode
+import org.bytedeco.javacv.FFmpegFrameGrabber
+import org.bytedeco.javacv.FrameGrabber
+import org.bytedeco.javacv.OpenCVFrameConverter
 import org.springframework.stereotype.Component
-import javax.annotation.PostConstruct
-import javax.annotation.PreDestroy
 
 /**
  * @author ant
  */
 @Component
-class DefaultCamera constructor(private val cameraId: Int = 0) : Camera {
+class DefaultCamera constructor(override val deviceId: Int = 0) : Camera {
 
-    lateinit var capture: VideoCapture
+    /**
+     * Grabber for taking frames from the camera stream
+     */
+    private val grabber: FrameGrabber = FFmpegFrameGrabber("/dev/video$deviceId")
 
-    @PostConstruct
-    fun init() {
-        capture = VideoCapture()
-        capture.open(cameraId)
+    /**
+     * For converting frames to matrices
+     */
+    private val toMatConverter: OpenCVFrameConverter.ToMat by lazy {
+        OpenCVFrameConverter.ToMat()
     }
 
-    @PreDestroy
-    fun release() {
-        capture.release()
-    }
+    @Synchronized override fun takePicture(): ByteArray {
+        grabber.start()
+        val frame = grabber.grabFrame()
+        grabber.stop()
 
-    override fun takePicture(): ByteArray {
-        val image = Mat()
+        val mat = toMatConverter.convert(frame)
+        val bytePointer = BytePointer()
+        imencode(".jpeg", mat, bytePointer)
 
-        capture.grab()
-        capture.retrieve(image)
-
-        val buf = MatOfByte()
-        Highgui.imencode(".jpg", image, buf)
-
-        return buf.toArray()
+        return bytePointer.stringBytes
     }
 
 }
