@@ -28,9 +28,7 @@ class Frame(val bytes: ByteArray, val height: Int, val width: Int) {
         return result
     }
 
-    override fun toString(): String {
-        return "Frame(bytes size=${bytes.size}, height=$height, width=$width)"
-    }
+    override fun toString(): String = "Frame(bytes size=${bytes.size}, height=$height, width=$width)"
 
 
 }

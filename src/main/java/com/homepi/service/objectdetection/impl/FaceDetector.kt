@@ -1,8 +1,8 @@
-package com.homepi.service.objectrecognition.impl
+package com.homepi.service.objectdetection.impl
 
 import com.homepi.service.camera.BytesFromMat
 import com.homepi.service.camera.Frame
-import com.homepi.service.objectrecognition.ObjectRecognizer
+import com.homepi.service.objectdetection.ObjectDetector
 import org.bytedeco.javacpp.BytePointer
 import org.bytedeco.javacpp.opencv_core
 import org.bytedeco.javacpp.opencv_core.cvLoad
@@ -15,13 +15,13 @@ import java.nio.file.Path
  *
  * @author ant
  */
-class FaceRecognizer(override val haarCascadePath: Path) : ObjectRecognizer {
+class FaceDetector(override val haarCascadePath: Path) : ObjectDetector {
 
     private val cascade: CvHaarClassifierCascade by lazy {
         CvHaarClassifierCascade(cvLoad(haarCascadePath.toAbsolutePath().toString()))
     }
 
-    override fun recognize(frame: Frame): Array<ByteArray> {
+    override fun detect(frame: Frame): Array<ByteArray> {
         val img = opencv_core.IplImage.createHeader(
                 opencv_core.CvSize(frame.width, frame.height),
                 opencv_core.IPL_DEPTH_8U,
@@ -38,7 +38,7 @@ class FaceRecognizer(override val haarCascadePath: Path) : ObjectRecognizer {
             val rect = opencv_core.CvRect(opencv_core.cvGetSeqElem(detectObjects, it))
             val croppedMat = imgMat.apply(opencv_core.Rect(rect.x(), rect.y(), rect.width(), rect.height()))
 
-            return@map BytesFromMat(croppedMat).bytes()
+            BytesFromMat(croppedMat).bytes()
         }.toTypedArray()
     }
 

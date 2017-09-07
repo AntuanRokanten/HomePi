@@ -5,7 +5,7 @@ import com.homepi.gpio.led.LedSet
 import com.homepi.gpio.sensor.MotionSensor
 import com.homepi.gpio.sensor.data.MotionEvent
 import com.homepi.service.camera.Camera
-import com.homepi.service.objectrecognition.ObjectRecognizer
+import com.homepi.service.objectdetection.ObjectDetector
 import com.homepi.service.telegram.ITelegramBot
 import org.slf4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
@@ -25,7 +25,7 @@ class MotionController @Autowired constructor(private val sensor: MotionSensor,
                                               private val telegramBot: ITelegramBot,
                                               private val ledSet: LedSet,
                                               private val camera: Camera,
-                                              private val faceRecognizer: ObjectRecognizer,
+                                              private val faceDetector: ObjectDetector,
                                               private val logger: Logger) {
 
     @Volatile private var lastMotionDate: LocalDateTime? = null
@@ -44,7 +44,7 @@ class MotionController @Autowired constructor(private val sensor: MotionSensor,
 
             if (telegramEnableReqNum.get() > 0) {
                 val frame = camera.takeFrame()
-                val faces = faceRecognizer.recognize(frame)
+                val faces = faceDetector.detect(frame)
                 telegramBot.notifyMotionDetected(frame.bytes, *faces)
             }
         })

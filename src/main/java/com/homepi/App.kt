@@ -9,8 +9,8 @@ import com.homepi.gpio.sensor.impl.Dht11Sensor
 import com.homepi.gpio.sensor.impl.MockMotionSensor
 import com.homepi.gpio.sensor.impl.MockTempAndHumSensor
 import com.homepi.gpio.sensor.impl.Sr501Sensor
-import com.homepi.service.objectrecognition.ObjectRecognizer
-import com.homepi.service.objectrecognition.impl.FaceRecognizer
+import com.homepi.service.objectdetection.ObjectDetector
+import com.homepi.service.objectdetection.impl.FaceDetector
 import com.pi4j.io.gpio.GpioController
 import com.pi4j.io.gpio.GpioFactory
 import com.pi4j.io.gpio.RaspiPin.*
@@ -64,9 +64,9 @@ open class App {
     open fun temperatureTaskScheduler(): TaskScheduler = ThreadPoolTaskScheduler()
 
     @Bean
-    open fun faceRecognizer(): ObjectRecognizer {
+    open fun faceRecognizer(): ObjectDetector {
         val cascadeUri = resourceUri("/cv/haarcascade_frontalface_alt.xml")
-        return FaceRecognizer(Paths.get(cascadeUri))
+        return FaceDetector(Paths.get(cascadeUri))
     }
 
     @Bean
