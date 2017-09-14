@@ -21,9 +21,25 @@ annotation class RpiProfile
 /**
  * Profile to be set by default.
  * Can be used without Raspberry Pi
- * since id doesn't  use any RPI specific classes
+ * since id doesn't use any RPI specific classes
  */
 @Target(FUNCTION, CLASS)
 @Retention(RUNTIME)
 @Profile("default")
 annotation class DefaultProfile
+
+/**
+ * Profile to be enabled on computers running linux
+ */
+@Target(FUNCTION, CLASS)
+@Retention(RUNTIME)
+@Profile("linux")
+annotation class LinuxProfile
+
+/**
+ * Profile to be enabled on computers running windows
+ */
+@Target(FUNCTION, CLASS)
+@Retention(RUNTIME)
+@Profile("windows")
+annotation class WindowsProfile

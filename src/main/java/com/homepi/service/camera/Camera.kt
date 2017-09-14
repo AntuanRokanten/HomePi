@@ -1,5 +1,7 @@
 package com.homepi.service.camera
 
+import org.bytedeco.javacpp.opencv_core
+
 /**
  * Interface for interacting with camera.
  *
@@ -8,13 +10,8 @@ package com.homepi.service.camera
 interface Camera {
 
     /**
-     * Id of the camera device in the system
-     */
-    val deviceId: Int
-
-    /**
      * Takes picture from the camera
      */
-    fun takeFrame(): Frame
+    fun takeFrame(): opencv_core.Mat
 
 }

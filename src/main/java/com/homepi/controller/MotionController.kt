@@ -31,7 +31,7 @@ class MotionController @Autowired constructor(private val sensor: MotionSensor,
     @Volatile private var lastMotionDate: LocalDateTime? = null
     private val telegramEnableReqNum by lazy { AtomicInteger(0) }
 
-    @MessageMapping("/motion-subscribe") // todo inject these values. also to js
+    @MessageMapping("/motion-subscribe")
     fun subscribe() {
         logger.info("Subscribing to motion events notifications")
 
@@ -45,7 +45,7 @@ class MotionController @Autowired constructor(private val sensor: MotionSensor,
             if (telegramEnableReqNum.get() > 0) {
                 val frame = camera.takeFrame()
                 val faces = faceDetector.detect(frame)
-                telegramBot.notifyMotionDetected(frame.bytes, *faces)
+                telegramBot.notifyMotionDetected(frame, *faces)
             }
         })
     }

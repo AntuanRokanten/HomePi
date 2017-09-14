@@ -14,6 +14,9 @@ import com.homepi.service.objectdetection.impl.FaceDetector
 import com.pi4j.io.gpio.GpioController
 import com.pi4j.io.gpio.GpioFactory
 import com.pi4j.io.gpio.RaspiPin.*
+import org.bytedeco.javacv.FFmpegFrameGrabber
+import org.bytedeco.javacv.FrameGrabber
+import org.bytedeco.javacv.OpenCVFrameGrabber
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.InjectionPoint
@@ -70,13 +73,34 @@ open class App {
     }
 
     @Bean
+    @RpiProfile
+    @LinuxProfile
+    open fun grabber(): FrameGrabber {
+        val grabber = FFmpegFrameGrabber("/dev/video0")
+        grabber.format = "video4linux2"
+        return grabber
+    }
+
+    @Bean
+    @WindowsProfile
+    open fun winGrabber(): FrameGrabber {
+        return OpenCVFrameGrabber(0)
+    }
+
+    @Bean
     @Scope("prototype")
     open fun logger(ip: InjectionPoint): Logger =
             LoggerFactory.getLogger(ip.member.name) // warning: will not work with field injection
 
     @Bean
+    @RpiProfile
     open fun ledSet(gpio: GpioController): LedSet =
             LedSet(Rl50Led(GPIO_22, gpio), Rl50Led(GPIO_23, gpio), Rl50Led(GPIO_24, gpio), Rl50Led(GPIO_25, gpio))
+
+    @Bean
+    @DefaultProfile
+    open fun mockLedSet(gpio: GpioController): LedSet =
+            LedSet()
 
     private fun resourceUri(path: String): URI {
         return this.javaClass.getResource(path).toURI() ?: throw ExceptionInInitializerError("Unable to find a resource in the following path $path")
