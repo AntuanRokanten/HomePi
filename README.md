@@ -17,7 +17,15 @@ RL50-TUR1TYG136 [Specs](http://polaris-light.com.ua/image/data/pdf/496.pdf)
 ![Circuit](https://github.com/AntuanRokanten/HomePi/blob/master/circuit/HomePi_circuit.jpg)
 
 ## Installation
-TODO
+In order to use DHT11 sensor, install Python library
+ 
+```
+sudo apt-get install build-essential python-dev python-openssl
+git clone https://github.com/adafruit/Adafruit_Python_DHT.git
+cd Adafruit_Python_DHT
+sudo python setup.py install
+```
+
 
 
 ## Author
