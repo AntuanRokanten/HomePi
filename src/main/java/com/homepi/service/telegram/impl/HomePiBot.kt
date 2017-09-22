@@ -2,14 +2,12 @@ package com.homepi.service.telegram.impl
 
 import com.homepi.gpio.sensor.MotionSensor
 import com.homepi.gpio.sensor.TemperatureAndHumiditySensor
-import com.homepi.service.camera.BytesFromMat
 import com.homepi.service.telegram.ITelegramBot
 import com.pengrad.telegrambot.TelegramBot
 import com.pengrad.telegrambot.TelegramBotAdapter
 import com.pengrad.telegrambot.UpdatesListener
 import com.pengrad.telegrambot.request.SendMessage
 import com.pengrad.telegrambot.request.SendPhoto
-import org.bytedeco.javacpp.opencv_core
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
@@ -50,7 +48,7 @@ class HomePiBot @Autowired constructor(
         }
     }
 
-    override fun notifyMotionDetected(picture: opencv_core.Mat?, vararg faces: ByteArray) {
+    override fun notifyMotionDetected(picture: ByteArray, vararg faces: ByteArray) {
         chatIds.forEach({ chatId ->
             var msg = "HomePi detected a new motion event."
             if (!faces.isEmpty()) {
@@ -59,7 +57,7 @@ class HomePiBot @Autowired constructor(
             bot.execute(SendMessage(chatId, msg))
 
             picture?.let {
-                bot.execute(SendPhoto(chatId, BytesFromMat(picture).bytes()))
+                bot.execute(SendPhoto(chatId, picture))
 
                 faces.forEach { face -> bot.execute(SendPhoto(chatId, face)) }
             }

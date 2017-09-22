@@ -38,5 +38,5 @@ class Rl50Led(override val pin: Pin, private val gpio: GpioController) : Led {
     fun preDestroy() {
         gpio.unprovisionPin(outputPin)
     }
-}
 
+}

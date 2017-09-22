@@ -9,7 +9,7 @@ import java.io.InputStreamReader
  * @author ant
  */
 @RestController()
-class TempeartureController {
+class  TempeartureController {
 
     @GetMapping("/temperature")
     fun test(): String {

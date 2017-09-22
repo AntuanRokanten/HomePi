@@ -3,7 +3,7 @@ package com.homepi.gpio.led
 import com.homepi.gpio.GpioElement
 
 /**
- * Lite emitting diode integface
+ * Lite emitting diode interface
  *
  * @author ant
  */

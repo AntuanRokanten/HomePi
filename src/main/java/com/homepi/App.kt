@@ -10,13 +10,16 @@ import com.homepi.gpio.sensor.impl.MockMotionSensor
 import com.homepi.gpio.sensor.impl.MockTempAndHumSensor
 import com.homepi.gpio.sensor.impl.Sr501Sensor
 import com.homepi.service.objectdetection.ObjectDetector
-import com.homepi.service.objectdetection.impl.FaceDetector
+import com.homepi.service.objectdetection.impl.OpenImajFaceDetector
 import com.pi4j.io.gpio.GpioController
 import com.pi4j.io.gpio.GpioFactory
 import com.pi4j.io.gpio.RaspiPin.*
-import org.bytedeco.javacv.FFmpegFrameGrabber
 import org.bytedeco.javacv.FrameGrabber
 import org.bytedeco.javacv.OpenCVFrameGrabber
+import org.openimaj.image.ImageUtilities
+import org.openimaj.image.colour.Transforms
+import org.openimaj.image.processing.face.detection.HaarCascadeDetector
+import org.openimaj.video.capture.VideoCapture
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.InjectionPoint
@@ -26,6 +29,8 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Scope
 import org.springframework.scheduling.TaskScheduler
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
+import java.io.ByteArrayOutputStream
+import java.io.File
 import java.net.URI
 import java.nio.file.Paths
 
@@ -69,15 +74,16 @@ open class App {
     @Bean
     open fun faceRecognizer(): ObjectDetector {
         val cascadeUri = resourceUri("/cv/haarcascade_frontalface_alt.xml")
-        return FaceDetector(Paths.get(cascadeUri))
+//        return FaceDetector(Paths.get(cascadeUri))
+        return OpenImajFaceDetector(Paths.get(cascadeUri))
     }
 
     @Bean
     @RpiProfile
     @LinuxProfile
     open fun grabber(): FrameGrabber {
-        val grabber = FFmpegFrameGrabber("/dev/video0")
-        grabber.format = "video4linux2"
+        val grabber = OpenCVFrameGrabber("/dev/video0")
+//        grabber.format = "video4linux2"
         return grabber
     }
 
@@ -110,3 +116,42 @@ open class App {
 fun main(args: Array<String>) {
     SpringApplication.run(App::class.java, *args)
 }
+
+fun main12(args: Array<String>) {
+    val detector = HaarCascadeDetector()
+
+    val videoDevices = VideoCapture.getVideoDevices()
+    val videoCapture = VideoCapture(320, 240)
+
+    for (mbfImage in videoCapture) {
+        val detectFaces = detector.detectFaces(Transforms.calculateIntensity(mbfImage))
+
+        if (detectFaces.size > 0) {
+            ImageUtilities.write(detectFaces.get(0).facePatch, File("/home/pi/face.png"))
+            ImageUtilities.write(detectFaces.get(0).facePatch, "jpeg", ByteArrayOutputStream())
+        }
+
+        ImageUtilities.write(mbfImage, File("/home/pi/img12.png"))
+    }
+}
+
+//fun main(args: Array<String>) {
+//    val cap = opencv_videoio.VideoCapture("/dev/video0")
+////    println(cap.open(0))
+//    Thread.sleep(100)
+////    println(cap.isOpened)
+//    val mat = opencv_core.Mat()
+//
+//    cap.grab()
+//    cap.read(mat)
+//    imwrite("/home/ant/frame.jpeg", mat)
+//
+//
+//    val classifier = opencv_objdetect.CascadeClassifier("C:\\haarcascade_frontalface_alt.xml")
+//    val rectVector = opencv_core.RectVector()
+//    classifier.detectMultiScale(mat, rectVector)
+//
+////    mat.release()
+////    cap.close()
+//    cap.release()
+//}

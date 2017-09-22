@@ -1,6 +1,5 @@
 package com.homepi.service.objectdetection
 
-import org.bytedeco.javacpp.opencv_core
 import java.nio.file.Path
 
 /**
@@ -18,6 +17,6 @@ interface ObjectDetector {
     /**
      * Detects objects on the picture provided
      */
-    fun detect(frame: opencv_core.Mat): Array<ByteArray>
+    fun detect(frame: ByteArray): Array<ByteArray>
 
 }

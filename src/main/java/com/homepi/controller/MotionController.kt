@@ -29,25 +29,29 @@ class MotionController @Autowired constructor(private val sensor: MotionSensor,
                                               private val logger: Logger) {
 
     @Volatile private var lastMotionDate: LocalDateTime? = null
+    @Volatile private var subscribed = false
     private val telegramEnableReqNum by lazy { AtomicInteger(0) }
 
     @MessageMapping("/motion-subscribe")
     fun subscribe() {
         logger.info("Subscribing to motion events notifications")
 
-        sensor.subscribeToMotionDetection({
-            logger.info("Motion is detected")
-            lastMotionDate = LocalDateTime.now()
+        if (!subscribed) {
+            sensor.subscribeToMotionDetection {
+                logger.info("Motion is detected")
+                lastMotionDate  = LocalDateTime.now()
 
-            ledSet.blinkAll(InSequenceBlinkMode(100), 500, 10000)
-            template.convertAndSend("/topic/motion", MotionEvent())
+                ledSet.blinkAll(InSequenceBlinkMode(100), 500, 10000)
+                template.convertAndSend("/topic/motion", MotionEvent())
 
-            if (telegramEnableReqNum.get() > 0) {
-                val frame = camera.takeFrame()
-                val faces = faceDetector.detect(frame)
-                telegramBot.notifyMotionDetected(frame, *faces)
+                if (telegramEnableReqNum.get() > 0) {
+                    val frame = camera.takeFrame()
+                    val faces = faceDetector.detect(frame)
+                    telegramBot.notifyMotionDetected(frame, *faces)
+                }
             }
-        })
+            subscribed = true
+        }
     }
 
     @MessageMapping("/last-motion-date")
@@ -66,7 +70,7 @@ class MotionController @Autowired constructor(private val sensor: MotionSensor,
     @MessageMapping("/motion-unsubscribe")
     fun unsubscribe() {
         logger.info("Unsubscribing from motion events notifications")
-        sensor.unsubscribeFromMotionDetection()
+//        sensor.unsubscribeFromMotionDetection()
     }
 
 }
