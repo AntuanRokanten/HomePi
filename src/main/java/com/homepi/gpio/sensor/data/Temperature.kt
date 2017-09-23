@@ -15,6 +15,6 @@ class Temperature(private val value: Double) {
         get() = value
 
     override fun toString(): String {
-        return "Temp (C) = $celcius"
+        return "Temperature (C) = $celcius"
     }
 }

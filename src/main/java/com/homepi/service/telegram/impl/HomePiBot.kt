@@ -12,6 +12,7 @@ import com.pengrad.telegrambot.request.SendPhoto
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import java.util.*
 import javax.annotation.PostConstruct
 
 /**
@@ -38,8 +39,8 @@ class HomePiBot @Autowired constructor(
                 val messageText = it.message().text()
 
                 when (messageText) {
-                    "/lastmotion" -> bot.execute(SendMessage(chatId, motionSensor.lastMotionDate.toString())) // todo format messages
-                    "/start" -> bot.execute(SendMessage(chatId, "Sup! \uD83D\uDD96 Here you can get the data registered by HomePi sensors \uD83D\uDE4F")) // todo
+                    "/lastmotion" -> bot.execute(SendMessage(chatId, Optional.ofNullable(motionSensor.lastMotionDate).map { it.toString() }.orElse("No motion events were detected since enabling motion tracking")))
+                    "/start" -> bot.execute(SendMessage(chatId, "Sup! \uD83D\uDD96 Here you can get the data registered by HomePi sensors \uD83D\uDE4F"))
                     "/tempindoors" -> bot.execute(SendMessage(chatId, tempAndHumSensor.temperature().toString()))
                     "/humindoors" -> bot.execute(SendMessage(chatId, tempAndHumSensor.humidity().toString()))
                     "/takeframe" -> bot.execute(SendPhoto(chatId, camera.takeFrame()))
@@ -59,7 +60,7 @@ class HomePiBot @Autowired constructor(
             }
             bot.execute(SendMessage(chatId, msg))
 
-            picture?.let {
+            picture.let {
                 bot.execute(SendPhoto(chatId, picture))
 
                 faces.forEach { face -> bot.execute(SendPhoto(chatId, face)) }
