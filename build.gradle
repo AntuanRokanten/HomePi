@@ -66,6 +66,9 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-devtools")
 
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+
     // for web-sockets
     compile("org.springframework:spring-messaging")
     compile("org.springframework.boot:spring-boot-starter-websocket")

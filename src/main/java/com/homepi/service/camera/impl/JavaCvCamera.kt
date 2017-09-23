@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired
 /**
  * @author ant
  */
-//@Component
+@Deprecated("Uses javacv which will be removed from the project")
 class JavaCvCamera @Autowired constructor(private val logger: Logger,
                                           private val grabber: FrameGrabber) : Camera {
 

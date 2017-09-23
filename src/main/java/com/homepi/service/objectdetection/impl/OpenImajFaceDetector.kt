@@ -3,14 +3,17 @@ package com.homepi.service.objectdetection.impl
 import com.homepi.service.objectdetection.ObjectDetector
 import org.openimaj.image.ImageUtilities
 import org.openimaj.image.processing.face.detection.HaarCascadeDetector
+import org.springframework.stereotype.Service
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.nio.file.Path
 
 /**
+ * Face detector which uses OpenIMAJ library.
+ *
  * @author ant
  */
-class OpenImajFaceDetector(override val haarCascadePath: Path) : ObjectDetector {
+@Service
+class OpenImajFaceDetector : ObjectDetector {
 
     private val detector by lazy { HaarCascadeDetector() }
 

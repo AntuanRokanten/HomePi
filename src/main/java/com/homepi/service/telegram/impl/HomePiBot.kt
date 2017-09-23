@@ -2,6 +2,7 @@ package com.homepi.service.telegram.impl
 
 import com.homepi.gpio.sensor.MotionSensor
 import com.homepi.gpio.sensor.TemperatureAndHumiditySensor
+import com.homepi.service.camera.Camera
 import com.homepi.service.telegram.ITelegramBot
 import com.pengrad.telegrambot.TelegramBot
 import com.pengrad.telegrambot.TelegramBotAdapter
@@ -20,6 +21,7 @@ import javax.annotation.PostConstruct
 class HomePiBot @Autowired constructor(
         private val motionSensor: MotionSensor,
         private val tempAndHumSensor: TemperatureAndHumiditySensor,
+        private val camera: Camera,
         @Value("\${telegram.bot.token}")
         private val token: String,
         @Value("#{'\${telegram.chat.ids}'.split(',')}")
@@ -40,6 +42,7 @@ class HomePiBot @Autowired constructor(
                     "/start" -> bot.execute(SendMessage(chatId, "Sup! \uD83D\uDD96 Here you can get the data registered by HomePi sensors \uD83D\uDE4F")) // todo
                     "/tempindoors" -> bot.execute(SendMessage(chatId, tempAndHumSensor.temperature().toString()))
                     "/humindoors" -> bot.execute(SendMessage(chatId, tempAndHumSensor.humidity().toString()))
+                    "/takeframe" -> bot.execute(SendPhoto(chatId, camera.takeFrame()))
                     "/tempandhumindoors" -> bot.execute(SendMessage(chatId, tempAndHumSensor.temperatureAndHumidity().toString()))
                     else -> bot.execute(SendMessage(chatId, "\uD83D\uDE45 I am not sure if I can process your command $messageText. Try again \uD83D\uDE01"))
                 }

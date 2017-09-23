@@ -7,6 +7,7 @@ import org.bytedeco.javacpp.opencv_core.*
 import org.bytedeco.javacpp.opencv_objdetect.CvHaarClassifierCascade
 import org.bytedeco.javacpp.opencv_objdetect.cvHaarDetectObjects
 import org.bytedeco.javacv.OpenCVFrameConverter
+import org.springframework.beans.factory.annotation.Autowired
 import java.nio.file.Path
 
 
@@ -16,7 +17,8 @@ import java.nio.file.Path
  *
  * @author ant
  */
-class FaceDetector(override val haarCascadePath: Path) : ObjectDetector {
+@Deprecated(message = "Uses javacv which will be removed from the project")
+class FaceDetector @Autowired constructor(private val haarCascadePath: Path) : ObjectDetector {
 
     private val cascade: CvHaarClassifierCascade by lazy {
         CvHaarClassifierCascade(cvLoad(haarCascadePath.toAbsolutePath().toString()))
